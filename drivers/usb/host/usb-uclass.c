@@ -213,7 +213,7 @@ static void usb_scan_bus(struct udevice *bus, bool recurse)
 
 	assert(recurse);	/* TODO: Support non-recusive */
 
-	printf("scanning bus %d for devices... ", bus->seq);
+	//printf("scanning bus %d for devices... ", bus->seq);
 	debug("\n");
 	ret = usb_scan_device(bus, 0, USB_SPEED_FULL, &dev);
 	if (ret)
@@ -248,7 +248,9 @@ int usb_init(void)
 	int count = 0;
 	int ret;
 
+	//printf("%s\n", __func__);
 	asynch_allowed = 1;
+	usb_hub_reset();
 
 	ret = uclass_get(UCLASS_USB, &uc);
 	if (ret)
@@ -258,7 +260,7 @@ int usb_init(void)
 
 	uclass_foreach_dev(bus, uc) {
 		/* init low_level USB */
-		printf("USB%d:   ", count);
+		debug("USB%d:   ", count);
 		count++;
 
 #ifdef CONFIG_SANDBOX
@@ -290,6 +292,7 @@ int usb_init(void)
 		usb_started = true;
 	}
 
+	//printf("%s, %d\n", __func__, __LINE__);
 	/*
 	 * lowlevel init done, now scan the bus for devices i.e. search HUBs
 	 * and configure them, first scan primary controllers.
@@ -335,6 +338,7 @@ int usb_init(void)
 	else if (controllers_initialized == 0)
 		printf("USB error: all controllers failed lowlevel init\n");
 
+	//printf("%s, %d, usb_startd[%d]\n", __func__, __LINE__, usb_started);
 	return usb_started ? 0 : -1;
 }
 
@@ -641,7 +645,7 @@ int usb_scan_device(struct udevice *parent, int port,
 	if (ret)
 		return ret;
 	ret = usb_find_child(parent, &udev->descriptor, iface, &dev);
-	debug("** usb_find_child returns %d\n", ret);
+	//printf("** usb_find_child returns %d\n", ret);
 	if (ret) {
 		if (ret != -ENOENT)
 			return ret;
@@ -659,7 +663,7 @@ int usb_scan_device(struct udevice *parent, int port,
 	priv->next_addr++;
 	ret = device_probe(dev);
 	if (ret) {
-		debug("%s: Device '%s' probe failed\n", __func__, dev->name);
+		printf("%s: Device '%s' probe failed\n", __func__, dev->name);
 		priv->next_addr--;
 		if (created)
 			device_unbind(dev);

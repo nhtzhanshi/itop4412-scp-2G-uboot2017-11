@@ -137,6 +137,13 @@ config USB_EHCI_OMAP
 	  Enables support for the on-chip EHCI controller on OMAP3 and later
 	  SoCs.
 
+config USB_EHCI_EXYNOS
+	bool  "Support for EXYNOS on-chip EHCI USB controller"
+	depends on ARCH_EXYNOS4
+	default y
+	---help---
+	  Enables support for the on-chip EHCI controller on EXYNOS chips.
+
 if USB_EHCI_MX7
 
 config MXC_USB_OTG_HACTIVE

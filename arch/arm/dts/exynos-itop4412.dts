@@ -229,6 +229,10 @@
 		reg = <0x12580000 0x100>;
 		#address-cells = <1>;
 		#size-cells = <1>;
+//		hub {
+//			compatible = "usb-hub";
+//			usb,device-class = <USB_CLASS_HUB>;
+//		};
 		phy {
 			compatible = "samsung,exynos-usb-phy";
 			reg = <0x125B0000 0x100>;

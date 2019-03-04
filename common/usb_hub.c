@@ -36,7 +36,7 @@
 #include <asm/state.h>
 #endif
 #include <asm/unaligned.h>
-
+#include <asm/arch/gpio.h>
 DECLARE_GLOBAL_DATA_PTR;
 
 #include <usb.h>
@@ -212,7 +212,7 @@ static void usb_hub_power_on(struct usb_hub_device *hub)
 	      max(100, (int)pgood_delay) + 1000);
 }
 
-#ifndef CONFIG_DM_USB
+//#ifndef CONFIG_DM_USB
 static struct usb_hub_device hub_dev[USB_MAX_HUB];
 static int usb_hub_index;
 
@@ -222,6 +222,16 @@ void usb_hub_reset(void)
 
 	/* Zero out global hub_dev in case its re-used again */
 	memset(hub_dev, 0, sizeof(hub_dev));
+
+    gpio_direction_output(EXYNOS4X12_GPIO_M24, 0);
+    gpio_direction_output(EXYNOS4X12_GPIO_M24, 1);
+
+    gpio_direction_output(EXYNOS4X12_GPIO_M33, 0);
+    gpio_direction_output(EXYNOS4X12_GPIO_M33, 1);
+
+    gpio_direction_output(EXYNOS4X12_GPIO_C01, 0);
+    udelay(7000);
+    gpio_direction_output(EXYNOS4X12_GPIO_C01, 1);
 }
 
 static struct usb_hub_device *usb_hub_allocate(void)
@@ -232,7 +242,7 @@ static struct usb_hub_device *usb_hub_allocate(void)
 	printf("ERROR: USB_MAX_HUB (%d) reached\n", USB_MAX_HUB);
 	return NULL;
 }
-#endif
+//#endif
 
 #define MAX_TRIES 5
 

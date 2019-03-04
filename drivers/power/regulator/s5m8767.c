@@ -119,6 +119,7 @@ static int reg_set_value(struct udevice *dev, const struct s5m8767_para *param,
 	const struct sec_voltage_desc *desc;
 	int ret, val;
 
+//	printf("%s\n", __func__);	
 	desc = param->vol;
 	if (uv < desc->min || uv > desc->max)
 		return -EINVAL;
@@ -128,6 +129,7 @@ static int reg_set_value(struct udevice *dev, const struct s5m8767_para *param,
 			      param->vol_bitmask << param->vol_bitpos,
 			      val);
 
+//	printf("%s[1]\n", __func__);	
 	return ret;
 }
 
@@ -152,8 +154,8 @@ static int ldo_get_value(struct udevice *dev)
 static int ldo_set_value(struct udevice *dev, int uv)
 {
 	int ldo = dev->driver_data;
-
-	return reg_set_value(dev, &ldo_param[ldo], uv);
+//	printf("%s, ldo[%d]\n", __func__, ldo);	
+	return reg_set_value(dev, &ldo_param[ldo - 1], uv);
 }
 
 static int reg_get_enable(struct udevice *dev, const struct s5m8767_para *param)
@@ -204,6 +206,7 @@ static int s5m8767_buck_probe(struct udevice *dev)
 {
 	struct dm_regulator_uclass_platdata *uc_pdata;
 
+//	printf("%s\n", __func__);	
 	uc_pdata = dev_get_uclass_platdata(dev);
 
 	uc_pdata->type = REGULATOR_TYPE_BUCK;
@@ -223,6 +226,7 @@ static int buck_set_value(struct udevice *dev, int uv)
 {
 	int buck = dev->driver_data;
 
+//	printf("%s\n", __func__);	
 	return reg_set_value(dev, &buck_param[buck], uv);
 }
 

@@ -187,6 +187,13 @@ static const struct usb_eth_prob_dev prob_dev[] = {
 		.get_info = r8152_eth_get_info,
 	},
 #endif
+#ifdef CONFIG_USB_ETHER_DM9621
+	{
+		.before_probe = dm9601_eth_before_probe,
+		.probe = dm9601_eth_probe,
+		.get_info = dm9601_eth_get_info,
+	},
+#endif
 	{ },		/* END */
 };
 
@@ -218,6 +225,7 @@ static void probe_valid_drivers(struct usb_device *dev)
 	struct eth_device *eth;
 	int j;
 
+	//printf("%s, %d\n", __func__, __LINE__);
 	for (j = 0; prob_dev[j].probe && prob_dev[j].get_info; j++) {
 		if (!prob_dev[j].probe(dev, 0, &usb_eth[usb_max_eth_dev]))
 			continue;
@@ -260,6 +268,7 @@ int usb_host_eth_scan(int mode)
 
 	old_async = usb_disable_asynch(1); /* asynch transfer not allowed */
 
+	//printf("%s, %d, usb_max_eth_dev[%d]\n", __func__, __LINE__, usb_max_eth_dev);
 	/* unregister a previously detected device */
 	for (i = 0; i < usb_max_eth_dev; i++)
 		eth_unregister(&usb_eth[i].eth_dev);
@@ -289,7 +298,7 @@ int usb_host_eth_scan(int mode)
 			struct usb_device *dev;
 
 			dev = usb_get_dev_index(bus, i); /* get device */
-			debug("i=%d, %s\n", i, dev ? dev->dev->name : "(done)");
+			printf("i=%d, %s\n", i, dev ? dev->dev->name : "(done)");
 			if (!dev)
 				break; /* no more devices available */
 

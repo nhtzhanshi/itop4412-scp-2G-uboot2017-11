@@ -36,7 +36,8 @@
 
 #define CONFIG_SYS_TEXT_BASE									0x43E00000
 
-#define CONFIG_MACH_TYPE										MACH_TYPE_ITOP4412
+/*#define CONFIG_MACH_TYPE										MACH_TYPE_ITOP4412*/
+#define CONFIG_MACH_TYPE										2838
 
 /* select serial console configuration */
 #define CONFIG_SERIAL2
@@ -97,7 +98,7 @@
 
 /*#define CONFIG_ENV_IS_IN_MMC*/
 #define CONFIG_SYS_MMC_ENV_DEV									0
-#define CONFIG_ENV_SIZE											(8 << 10)	/* 16 KB */
+#define CONFIG_ENV_SIZE											(16 << 10)	/* 16 KB */
 #define RESERVE_BLOCK_SIZE										(512)
 #define BL1_SIZE												(8 << 10) /*14 K reserved for BL1*/
 #define BL2_SIZE												(16 << 10)
